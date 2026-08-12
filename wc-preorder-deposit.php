@@ -88,11 +88,16 @@ function wcpd_init_plugin() {
     WCPD_Order::init();
     WCPD_Admin::init();
     WCPD_Payment::init();
+
+    add_action('wp_enqueue_scripts', 'wcpd_enqueue_assets');
+    add_action('admin_enqueue_scripts', 'wcpd_admin_assets');
+    add_filter('woocommerce_email_classes', 'wcpd_register_email_class');
 }
 
-add_action('wp_enqueue_scripts', 'wcpd_enqueue_assets');
-
 function wcpd_enqueue_assets() {
+    if (!function_exists('is_woocommerce')) {
+        return;
+    }
     if (!is_woocommerce() && !is_cart() && !is_checkout() && !is_product()) {
         return;
     }
@@ -100,16 +105,12 @@ function wcpd_enqueue_assets() {
     wp_enqueue_script('wcpd-public', WCPD_URL . 'assets/public.js', array('jquery'), WCPD_VERSION, true);
 }
 
-add_action('admin_enqueue_scripts', 'wcpd_admin_assets');
-
 function wcpd_admin_assets($hook) {
     global $post_type, $post;
     if (($hook === 'edit.php' && $post_type === 'shop_order') || ($hook === 'post.php' && isset($post) && $post->post_type === 'shop_order')) {
         wp_enqueue_style('wcpd-admin', WCPD_URL . 'assets/admin.css', array(), WCPD_VERSION);
     }
 }
-
-add_filter('woocommerce_email_classes', 'wcpd_register_email_class');
 
 function wcpd_register_email_class($emails) {
     $emails['WCPD_Email_Preorder_Ready'] = new WCPD_Email_Preorder_Ready();
