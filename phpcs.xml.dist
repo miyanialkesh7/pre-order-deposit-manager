@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<ruleset name="Pre-Order Deposit Manager">
+	<description>Coding standard for the Pre-Order Deposit Manager plugin.</description>
+
+	<file>.</file>
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<arg value="sp"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+
+	<rule ref="WordPress">
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName">
+			<!-- The plugin bootstrap file is named after the plugin, not a class. -->
+			<exclude-pattern>wc-preorder-deposit.php</exclude-pattern>
+		</exclude>
+	</rule>
+
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<!-- Registered by WooCommerce; not a WordPress core capability. -->
+			<property name="custom_capabilities" type="array">
+				<element value="manage_woocommerce"/>
+			</property>
+		</properties>
+	</rule>
+
+	<config name="minimum_supported_wp_version" value="5.8"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="wc-preorder-deposit"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

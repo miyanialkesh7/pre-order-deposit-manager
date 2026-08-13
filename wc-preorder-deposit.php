@@ -8,64 +8,77 @@
  * Requires PHP: 7.4
  * WC requires at least: 6.0
  * License: GPLv2
+ *
+ * @package WC_Preorder_Deposit
  */
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-define('WCPD_VERSION', '1.0.0');
-define('WCPD_DIR', plugin_dir_path(__FILE__));
-define('WCPD_URL', plugin_dir_url(__FILE__));
+define( 'WCPD_VERSION', '1.0.0' );
+define( 'WCPD_DIR', plugin_dir_path( __FILE__ ) );
+define( 'WCPD_URL', plugin_dir_url( __FILE__ ) );
 
-add_action('init', 'wcpd_register_statuses', 9);
+add_action( 'init', 'wcpd_register_statuses', 9 );
 
+/**
+ * Registers the custom post statuses used for pre-order orders.
+ *
+ * @return void
+ */
 function wcpd_register_statuses() {
-    $statuses = array(
-        'wc-preorder-deposit' => array(
-            'label'                     => _x('Pre-Order: Deposit Paid', 'Order status', 'wc-preorder-deposit'),
-            'public'                    => false,
-            'exclude_from_search'       => false,
-            'show_in_admin_status_list' => true,
-            'show_in_admin_all_list'    => true,
-            'label_count'               => _n_noop('Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'wc-preorder-deposit'),
-        ),
-        'wc-preorder-ready' => array(
-            'label'                     => _x('Pre-Order: Ready for Delivery', 'Order status', 'wc-preorder-deposit'),
-            'public'                    => false,
-            'exclude_from_search'       => false,
-            'show_in_admin_status_list' => true,
-            'show_in_admin_all_list'    => true,
-            'label_count'               => _n_noop('Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'wc-preorder-deposit'),
-        ),
-        'wc-preorder-completed' => array(
-            'label'                     => _x('Pre-Order: Completed', 'Order status', 'wc-preorder-deposit'),
-            'public'                    => false,
-            'exclude_from_search'       => false,
-            'show_in_admin_status_list' => true,
-            'show_in_admin_all_list'    => true,
-            'label_count'               => _n_noop('Pre-Order: Completed <span class="count">(%s)</span>', 'Pre-Order: Completed <span class="count">(%s)</span>', 'wc-preorder-deposit'),
-        ),
-    );
+	$statuses = array(
+		'wc-preorder-deposit'   => array(
+			'label'                     => _x( 'Pre-Order: Deposit Paid', 'Order status', 'wc-preorder-deposit' ),
+			'public'                    => false,
+			'exclude_from_search'       => false,
+			'show_in_admin_status_list' => true,
+			'show_in_admin_all_list'    => true,
+			'label_count'               => _n_noop( 'Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'wc-preorder-deposit' ),
+		),
+		'wc-preorder-ready'     => array(
+			'label'                     => _x( 'Pre-Order: Ready for Delivery', 'Order status', 'wc-preorder-deposit' ),
+			'public'                    => false,
+			'exclude_from_search'       => false,
+			'show_in_admin_status_list' => true,
+			'show_in_admin_all_list'    => true,
+			'label_count'               => _n_noop( 'Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'wc-preorder-deposit' ),
+		),
+		'wc-preorder-completed' => array(
+			'label'                     => _x( 'Pre-Order: Completed', 'Order status', 'wc-preorder-deposit' ),
+			'public'                    => false,
+			'exclude_from_search'       => false,
+			'show_in_admin_status_list' => true,
+			'show_in_admin_all_list'    => true,
+			'label_count'               => _n_noop( 'Pre-Order: Completed <span class="count">(%s)</span>', 'Pre-Order: Completed <span class="count">(%s)</span>', 'wc-preorder-deposit' ),
+		),
+	);
 
-    foreach ($statuses as $slug => $args) {
-        register_post_status($slug, $args);
-    }
+	foreach ( $statuses as $slug => $args ) {
+		register_post_status( $slug, $args );
+	}
 }
 
-add_filter('wc_order_statuses', 'wcpd_add_to_order_statuses');
+add_filter( 'wc_order_statuses', 'wcpd_add_to_order_statuses' );
 
-function wcpd_add_to_order_statuses($statuses) {
-    $new = array();
-    foreach ($statuses as $key => $label) {
-        $new[$key] = $label;
-        if ($key === 'wc-processing') {
-            $new['wc-preorder-deposit']   = _x('Pre-Order: Deposit Paid', 'Order status', 'wc-preorder-deposit');
-            $new['wc-preorder-ready']     = _x('Pre-Order: Ready for Delivery', 'Order status', 'wc-preorder-deposit');
-            $new['wc-preorder-completed'] = _x('Pre-Order: Completed', 'Order status', 'wc-preorder-deposit');
-        }
-    }
-    return $new;
+/**
+ * Inserts the pre-order statuses into WooCommerce's order status list.
+ *
+ * @param array $statuses Existing order statuses, keyed by status slug.
+ * @return array Order statuses including the pre-order statuses.
+ */
+function wcpd_add_to_order_statuses( $statuses ) {
+	$new = array();
+	foreach ( $statuses as $key => $label ) {
+		$new[ $key ] = $label;
+		if ( 'wc-processing' === $key ) {
+			$new['wc-preorder-deposit']   = _x( 'Pre-Order: Deposit Paid', 'Order status', 'wc-preorder-deposit' );
+			$new['wc-preorder-ready']     = _x( 'Pre-Order: Ready for Delivery', 'Order status', 'wc-preorder-deposit' );
+			$new['wc-preorder-completed'] = _x( 'Pre-Order: Completed', 'Order status', 'wc-preorder-deposit' );
+		}
+	}
+	return $new;
 }
 
 require_once WCPD_DIR . 'includes/class-wcpd-product.php';
@@ -74,52 +87,79 @@ require_once WCPD_DIR . 'includes/class-wcpd-order.php';
 require_once WCPD_DIR . 'includes/class-wcpd-admin.php';
 require_once WCPD_DIR . 'includes/class-wcpd-payment.php';
 
-add_action('plugins_loaded', 'wcpd_init_plugin');
+add_action( 'plugins_loaded', 'wcpd_init_plugin' );
 
+/**
+ * Boots the plugin once WooCommerce is confirmed active.
+ *
+ * @return void
+ */
 function wcpd_init_plugin() {
-    if (!class_exists('WooCommerce')) {
-        return;
-    }
+	if ( ! class_exists( 'WooCommerce' ) ) {
+		return;
+	}
 
-    require_once WCPD_DIR . 'includes/class-wcpd-emails.php';
+	require_once WCPD_DIR . 'includes/class-wcpd-email-preorder-ready.php';
 
-    WCPD_Product::init();
-    WCPD_Cart::init();
-    WCPD_Order::init();
-    WCPD_Admin::init();
-    WCPD_Payment::init();
+	WCPD_Product::init();
+	WCPD_Cart::init();
+	WCPD_Order::init();
+	WCPD_Admin::init();
+	WCPD_Payment::init();
 
-    add_action('wp_enqueue_scripts', 'wcpd_enqueue_assets');
-    add_action('admin_enqueue_scripts', 'wcpd_admin_assets');
-    add_filter('woocommerce_email_classes', 'wcpd_register_email_class');
+	add_action( 'wp_enqueue_scripts', 'wcpd_enqueue_assets' );
+	add_action( 'admin_enqueue_scripts', 'wcpd_admin_assets' );
+	add_filter( 'woocommerce_email_classes', 'wcpd_register_email_class' );
 }
 
+/**
+ * Enqueues the front-end styles and scripts on shop/cart/checkout/product pages.
+ *
+ * @return void
+ */
 function wcpd_enqueue_assets() {
-    if (!function_exists('is_woocommerce')) {
-        return;
-    }
-    if (!is_woocommerce() && !is_cart() && !is_checkout() && !is_product()) {
-        return;
-    }
-    wp_enqueue_style('wcpd-public', WCPD_URL . 'assets/public.css', array(), WCPD_VERSION);
-    wp_enqueue_script('wcpd-public', WCPD_URL . 'assets/public.js', array('jquery'), WCPD_VERSION, true);
+	if ( ! function_exists( 'is_woocommerce' ) ) {
+		return;
+	}
+	if ( ! is_woocommerce() && ! is_cart() && ! is_checkout() && ! is_product() ) {
+		return;
+	}
+	wp_enqueue_style( 'wcpd-public', WCPD_URL . 'assets/public.css', array(), WCPD_VERSION );
+	wp_enqueue_script( 'wcpd-public', WCPD_URL . 'assets/public.js', array( 'jquery' ), WCPD_VERSION, true );
 }
 
-function wcpd_admin_assets($hook) {
-    global $post_type, $post;
-    if (($hook === 'edit.php' && $post_type === 'shop_order') || ($hook === 'post.php' && isset($post) && $post->post_type === 'shop_order')) {
-        wp_enqueue_style('wcpd-admin', WCPD_URL . 'assets/admin.css', array(), WCPD_VERSION);
-    }
+/**
+ * Enqueues the admin stylesheet on the order list and order edit screens.
+ *
+ * @param string $hook The current admin page hook suffix.
+ * @return void
+ */
+function wcpd_admin_assets( $hook ) {
+	global $post_type, $post;
+	if ( ( 'edit.php' === $hook && 'shop_order' === $post_type ) || ( 'post.php' === $hook && isset( $post ) && 'shop_order' === $post->post_type ) ) {
+		wp_enqueue_style( 'wcpd-admin', WCPD_URL . 'assets/admin.css', array(), WCPD_VERSION );
+	}
 }
 
-function wcpd_register_email_class($emails) {
-    $emails['WCPD_Email_Preorder_Ready'] = new WCPD_Email_Preorder_Ready();
-    return $emails;
+/**
+ * Registers the "ready for delivery" notification with WooCommerce's mailer.
+ *
+ * @param array $emails Registered WC_Email instances, keyed by class name.
+ * @return array Registered WC_Email instances including this plugin's email.
+ */
+function wcpd_register_email_class( $emails ) {
+	$emails['WCPD_Email_Preorder_Ready'] = new WCPD_Email_Preorder_Ready();
+	return $emails;
 }
 
-register_activation_hook(__FILE__, 'wcpd_activate');
+register_activation_hook( __FILE__, 'wcpd_activate' );
 
+/**
+ * Runs on plugin activation: registers statuses and flushes rewrite rules.
+ *
+ * @return void
+ */
 function wcpd_activate() {
-    wcpd_register_statuses();
-    flush_rewrite_rules();
+	wcpd_register_statuses();
+	flush_rewrite_rules();
 }
