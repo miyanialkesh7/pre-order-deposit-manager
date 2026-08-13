@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 $order     = $args['order']; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- local template variable, not the WP $order global.
-$remaining = (float) $order->get_meta( '_wcpd_remaining_total' );
-$full      = (float) $order->get_meta( '_wcpd_full_total' );
-$deposit   = (float) $order->get_meta( '_wcpd_deposit_total' );
+$wcpd_remaining = (float) $order->get_meta( '_wcpd_remaining_total' );
+$wcpd_full      = (float) $order->get_meta( '_wcpd_full_total' );
+$wcpd_deposit   = (float) $order->get_meta( '_wcpd_deposit_total' );
 ?>
 <!DOCTYPE html>
 <html>
@@ -66,7 +66,7 @@ $deposit   = (float) $order->get_meta( '_wcpd_deposit_total' );
 							<span style="font-size:14px;color:#64748b;"><?php _e( 'Total Value', 'wc-preorder-deposit' ); ?></span>
 						</td>
 						<td align="right" style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
-							<span style="font-size:14px;font-weight:700;color:#0f172a;"><?php echo wc_price( $full ); ?></span>
+							<span style="font-size:14px;font-weight:700;color:#0f172a;"><?php echo wc_price( $wcpd_full ); ?></span>
 						</td>
 					</tr>
 					<tr>
@@ -74,7 +74,7 @@ $deposit   = (float) $order->get_meta( '_wcpd_deposit_total' );
 							<span style="font-size:14px;color:#64748b;"><?php _e( 'Deposit Paid', 'wc-preorder-deposit' ); ?></span>
 						</td>
 						<td align="right" style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
-							<span style="font-size:14px;font-weight:700;color:#4f46e5;"><?php echo wc_price( $deposit ); ?></span>
+							<span style="font-size:14px;font-weight:700;color:#4f46e5;"><?php echo wc_price( $wcpd_deposit ); ?></span>
 						</td>
 					</tr>
 					<tr>
@@ -82,7 +82,7 @@ $deposit   = (float) $order->get_meta( '_wcpd_deposit_total' );
 							<span style="font-size:14px;color:#0f172a;font-weight:600;"><?php _e( 'Remaining Amount', 'wc-preorder-deposit' ); ?></span>
 						</td>
 						<td align="right" style="padding:16px 0 0 0;">
-							<span style="font-size:18px;font-weight:800;color:#d97706;"><?php echo wc_price( $remaining ); ?></span>
+							<span style="font-size:18px;font-weight:800;color:#d97706;"><?php echo wc_price( $wcpd_remaining ); ?></span>
 						</td>
 					</tr>
 				</table>
