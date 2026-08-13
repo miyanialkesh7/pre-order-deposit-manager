@@ -1,5 +1,5 @@
 === Pre-Order Deposit Manager for WooCommerce ===
-Contributors: byot
+Contributors: byot, alkesh7
 Tags: woocommerce, pre-order, deposit, payments, orders
 Requires at least: 5.8
 Tested up to: 7.1
