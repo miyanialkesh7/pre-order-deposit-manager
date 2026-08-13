@@ -8,8 +8,8 @@ class WCPD_Email_Preorder_Ready extends WC_Email {
     public function __construct() {
         $this->id             = 'wcpd_preorder_ready';
         $this->customer_email = true;
-        $this->title          = __('Pre-Order: Ready for Delivery', 'wc-preorder-deposit');
-        $this->description    = __('Notification sent when the product is ready and the remainder must be paid.', 'wc-preorder-deposit');
+        $this->title          = __('Pre-Order: Ready for Delivery', 'pre-order-deposit-manager');
+        $this->description    = __('Notification sent when the product is ready and the remainder must be paid.', 'pre-order-deposit-manager');
         $this->template_html  = 'emails/preorder-ready.php';
         $this->template_plain = 'emails/plain/preorder-ready.php';
         $this->placeholders   = array(
@@ -38,11 +38,11 @@ class WCPD_Email_Preorder_Ready extends WC_Email {
     }
 
     public function get_default_subject() {
-        return __('Your order #{order_number} is ready for delivery', 'wc-preorder-deposit');
+        return __('Your order #{order_number} is ready for delivery', 'pre-order-deposit-manager');
     }
 
     public function get_default_heading() {
-        return __('Your product is ready', 'wc-preorder-deposit');
+        return __('Your product is ready', 'pre-order-deposit-manager');
     }
 
     public function get_content_html() {

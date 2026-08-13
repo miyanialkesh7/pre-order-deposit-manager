@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WC Pre-Order Deposit
+ * Plugin Name: Pre-Order Deposit Manager for WooCommerce
  * Description: Customers pay a 30% deposit on pre-order. The remaining 70% is charged automatically or manually when the product is marked ready for delivery.
  * Version: 1.0.0
  * Author: BYOT
@@ -8,6 +8,7 @@
  * Requires PHP: 7.4
  * WC requires at least: 6.0
  * License: GPLv2
+ * Text Domain: pre-order-deposit-manager
  */
 
 if (!defined('ABSPATH')) {
@@ -22,29 +23,32 @@ add_action('init', 'wcpd_register_statuses', 9);
 
 function wcpd_register_statuses() {
     $statuses = array(
-        'wc-preorder-deposit' => array(
-            'label'                     => _x('Pre-Order: Deposit Paid', 'Order status', 'wc-preorder-deposit'),
+        'wc-preorder-deposit'   => array(
+            'label'                     => _x('Pre-Order: Deposit Paid', 'Order status', 'pre-order-deposit-manager'),
             'public'                    => false,
             'exclude_from_search'       => false,
             'show_in_admin_status_list' => true,
             'show_in_admin_all_list'    => true,
-            'label_count'               => _n_noop('Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'wc-preorder-deposit'),
+            /* translators: %s: number of orders in this status. */
+            'label_count'               => _n_noop('Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'Pre-Order: Deposit Paid <span class="count">(%s)</span>', 'pre-order-deposit-manager'),
         ),
         'wc-preorder-ready' => array(
-            'label'                     => _x('Pre-Order: Ready for Delivery', 'Order status', 'wc-preorder-deposit'),
+            'label'                     => _x('Pre-Order: Ready for Delivery', 'Order status', 'pre-order-deposit-manager'),
             'public'                    => false,
             'exclude_from_search'       => false,
             'show_in_admin_status_list' => true,
             'show_in_admin_all_list'    => true,
-            'label_count'               => _n_noop('Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'wc-preorder-deposit'),
+            /* translators: %s: number of orders in this status. */
+            'label_count'               => _n_noop('Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'Pre-Order: Ready for Delivery <span class="count">(%s)</span>', 'pre-order-deposit-manager'),
         ),
         'wc-preorder-completed' => array(
-            'label'                     => _x('Pre-Order: Completed', 'Order status', 'wc-preorder-deposit'),
+            'label'                     => _x('Pre-Order: Completed', 'Order status', 'pre-order-deposit-manager'),
             'public'                    => false,
             'exclude_from_search'       => false,
             'show_in_admin_status_list' => true,
             'show_in_admin_all_list'    => true,
-            'label_count'               => _n_noop('Pre-Order: Completed <span class="count">(%s)</span>', 'Pre-Order: Completed <span class="count">(%s)</span>', 'wc-preorder-deposit'),
+            /* translators: %s: number of orders in this status. */
+            'label_count'               => _n_noop('Pre-Order: Completed <span class="count">(%s)</span>', 'Pre-Order: Completed <span class="count">(%s)</span>', 'pre-order-deposit-manager'),
         ),
     );
 
@@ -60,9 +64,9 @@ function wcpd_add_to_order_statuses($statuses) {
     foreach ($statuses as $key => $label) {
         $new[$key] = $label;
         if ($key === 'wc-processing') {
-            $new['wc-preorder-deposit']   = _x('Pre-Order: Deposit Paid', 'Order status', 'wc-preorder-deposit');
-            $new['wc-preorder-ready']     = _x('Pre-Order: Ready for Delivery', 'Order status', 'wc-preorder-deposit');
-            $new['wc-preorder-completed'] = _x('Pre-Order: Completed', 'Order status', 'wc-preorder-deposit');
+            $new['wc-preorder-deposit']   = _x('Pre-Order: Deposit Paid', 'Order status', 'pre-order-deposit-manager');
+            $new['wc-preorder-ready']     = _x('Pre-Order: Ready for Delivery', 'Order status', 'pre-order-deposit-manager');
+            $new['wc-preorder-completed'] = _x('Pre-Order: Completed', 'Order status', 'pre-order-deposit-manager');
         }
     }
     return $new;

@@ -1,4 +1,4 @@
-# Pre-Order Deposit Manager
+# Pre-Order Deposit Manager for WooCommerce
 
 A WooCommerce extension that lets customers pay a 30% deposit on pre-order products and settle the remaining 70% once the item is ready for delivery — either automatically through a saved card or manually by the store admin.
 

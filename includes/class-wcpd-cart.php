@@ -30,9 +30,17 @@ class WCPD_Cart {
         $out .= '<div class="wcpd-deposit-card">';
         $out .= '<div class="wcpd-deposit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>';
         $out .= '<div class="wcpd-deposit-body">';
-        $out .= '<div class="wcpd-deposit-label">' . sprintf(__('Pay %s%% now', 'wc-preorder-deposit'), self::$percent) . '</div>';
+        $out .= '<div class="wcpd-deposit-label">' . sprintf(
+            /* translators: %s: deposit percentage, e.g. "30". */
+            __('Pay %s%% now', 'pre-order-deposit-manager'),
+            self::$percent
+        ) . '</div>';
         $out .= '<div class="wcpd-deposit-amount">' . wc_price($deposit) . '</div>';
-        $out .= '<div class="wcpd-deposit-note">' . sprintf(__('Total price: %s', 'wc-preorder-deposit'), wc_price($full)) . '</div>';
+        $out .= '<div class="wcpd-deposit-note">' . sprintf(
+            /* translators: %s: full product price formatted as currency. */
+            __('Total price: %s', 'pre-order-deposit-manager'),
+            wc_price($full)
+        ) . '</div>';
         $out .= '</div></div>';
         $out .= '</div>';
 
@@ -53,8 +61,8 @@ class WCPD_Cart {
         echo '<div class="wcpd-cart-notice">';
         echo '<div class="wcpd-notice-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>';
         echo '<div class="wcpd-notice-body">';
-        echo '<strong>' . __('Pre-Order Items in Cart', 'wc-preorder-deposit') . '</strong>';
-        echo '<span>' . __('You will be charged a 30% deposit now. The remaining balance will be due when your order is ready for delivery.', 'wc-preorder-deposit') . '</span>';
+        echo '<strong>' . __('Pre-Order Items in Cart', 'pre-order-deposit-manager') . '</strong>';
+        echo '<span>' . __('You will be charged a 30% deposit now. The remaining balance will be due when your order is ready for delivery.', 'pre-order-deposit-manager') . '</span>';
         echo '</div></div>';
     }
 
@@ -95,7 +103,7 @@ class WCPD_Cart {
         $out = '<div class="wcpd-cart-price">';
         $out .= '<span class="wcpd-cart-strike">' . wc_price($orig) . '</span>';
         $out .= '<span class="wcpd-cart-deposit">' . $price . '</span>';
-        $out .= '<span class="wcpd-cart-tag">30% deposit</span>';
+        $out .= '<span class="wcpd-cart-tag">' . esc_html__('30% deposit', 'pre-order-deposit-manager') . '</span>';
         $out .= '</div>';
         return $out;
     }
@@ -108,7 +116,11 @@ class WCPD_Cart {
         $orig = isset($item['_wcpd_original']) ? (float) $item['_wcpd_original'] * $item['quantity'] : 0;
         $out = '<div class="wcpd-cart-sub">';
         $out .= '<div class="wcpd-cart-sub-deposit">' . $subtotal . '</div>';
-        $out .= '<div class="wcpd-cart-sub-full">' . sprintf(__('Total value: %s', 'wc-preorder-deposit'), wc_price($orig)) . '</div>';
+        $out .= '<div class="wcpd-cart-sub-full">' . sprintf(
+            /* translators: %s: full line item value formatted as currency. */
+            __('Total value: %s', 'pre-order-deposit-manager'),
+            wc_price($orig)
+        ) . '</div>';
         $out .= '</div>';
         return $out;
     }
@@ -160,7 +172,7 @@ class WCPD_Cart {
         $order->save_meta_data();
 
         if ($order->get_status() === 'processing' || $order->get_status() === 'completed') {
-            $order->update_status('wc-preorder-deposit', __('Deposit paid. Waiting for delivery.', 'wc-preorder-deposit'));
+            $order->update_status('wc-preorder-deposit', __('Deposit paid. Waiting for delivery.', 'pre-order-deposit-manager'));
         }
     }
 }

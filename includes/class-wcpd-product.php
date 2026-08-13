@@ -15,8 +15,8 @@ class WCPD_Product {
         $opts['preorder_deposit'] = array(
             'id'            => '_wcpd_enabled',
             'wrapper_class' => 'show_if_simple show_if_variable',
-            'label'         => __('Pre-Order Deposit', 'wc-preorder-deposit'),
-            'description'   => __('Customer pays 30% now, the rest on delivery.', 'wc-preorder-deposit'),
+            'label'         => __('Pre-Order Deposit', 'pre-order-deposit-manager'),
+            'description'   => __('Customer pays 30% now, the rest on delivery.', 'pre-order-deposit-manager'),
             'default'       => 'no',
         );
         return $opts;
@@ -36,6 +36,6 @@ class WCPD_Product {
         if (!$product || !self::is_preorder($product->get_id())) {
             return;
         }
-        echo '<div class="wcpd-badge-ribbon"><span>PRE-ORDER</span></div>';
+        echo '<div class="wcpd-badge-ribbon"><span>' . esc_html__('PRE-ORDER', 'pre-order-deposit-manager') . '</span></div>';
     }
 }

@@ -20,7 +20,7 @@
                     location.reload();
                 } else {
                     alert('Error: ' + res.data);
-                    btn.prop('disabled', false).removeClass('wcpd-btn-loading').html('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Mark Ready & Notify');
+                    btn.prop('disabled', false).removeClass('wcpd-btn-loading').html('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> ' + wcpd_admin.strings.mark_ready_label);
                 }
             });
         });
@@ -32,7 +32,7 @@
             }
 
             var btn = $(this);
-            btn.prop('disabled', true).addClass('wcpd-btn-loading').html('<span class="wcpd-spinner"></span> Processing...');
+            btn.prop('disabled', true).addClass('wcpd-btn-loading').html('<span class="wcpd-spinner"></span> ' + wcpd_admin.strings.processing);
 
             $.post(wcpd_admin.ajax_url, {
                 action: 'wcpd_charge_remaining',
@@ -44,7 +44,7 @@
                     location.reload();
                 } else {
                     alert('Charge error: ' + res.data);
-                    btn.prop('disabled', false).removeClass('wcpd-btn-loading').html('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Auto-Charge Remainder');
+                    btn.prop('disabled', false).removeClass('wcpd-btn-loading').html('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> ' + wcpd_admin.strings.auto_charge_label);
                 }
             });
         });
