@@ -92,7 +92,7 @@ class WCPD_Payment {
         if (is_array($result) && isset($result['result']) && $result['result'] === 'success') {
             $order->update_meta_data('_wcpd_remaining_paid', $remaining);
             $order->update_meta_data('_wcpd_remaining_paid_date', current_time('mysql'));
-            $order->update_status('wc-preorder-completed', __('Final payment processed. Order completed.', 'wc-preorder-deposit'));
+            $order->update_status('wc-preorder-done', __('Final payment processed. Order completed.', 'wc-preorder-deposit'));
             $order->save_meta_data();
 
             wp_send_json_success(__('Final payment processed. Order completed.', 'wc-preorder-deposit'));

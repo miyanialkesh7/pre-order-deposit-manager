@@ -8,18 +8,48 @@ class WCPD_Admin {
     public static function init() {
         add_action('add_meta_boxes', array(__CLASS__, 'meta_boxes'));
         add_action('admin_enqueue_scripts', array(__CLASS__, 'assets'));
+
+        // Legacy (post-based) order list table hooks.
         add_filter('manage_edit-shop_order_columns', array(__CLASS__, 'col_add'), 20);
         add_action('manage_shop_order_posts_custom_column', array(__CLASS__, 'col_show'), 20, 2);
+
+        // HPOS (custom order table) order list table hooks.
+        $hpos_screen = self::get_order_screen_id();
+        if ('shop_order' !== $hpos_screen) {
+            add_filter('manage_' . $hpos_screen . '_columns', array(__CLASS__, 'col_add'), 20);
+            add_action('manage_' . $hpos_screen . '_custom_column', array(__CLASS__, 'col_show'), 20, 2);
+        }
+
         add_filter('woocommerce_admin_order_data_after_order_details', array(__CLASS__, 'order_detail_badge'));
+    }
+
+    /**
+     * The current order-edit screen ID, whether HPOS is enabled or not.
+     *
+     * @return string
+     */
+    private static function get_order_screen_id() {
+        return function_exists('wc_get_page_screen_id') ? wc_get_page_screen_id('shop-order') : 'shop_order';
     }
 
     public static function assets($hook) {
         global $post_type, $post;
-        if ($hook === 'edit.php' && $post_type === 'shop_order') {
+        $order_screen = self::get_order_screen_id();
+        $on_hpos_page = ($hook === $order_screen);
+        // On the HPOS orders page, list and edit share one screen ID; only
+        // ?action=edit&id=... is the single-order edit view.
+        $on_hpos_edit = $on_hpos_page && isset($_GET['action']) && 'edit' === $_GET['action']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only, used only to decide which assets to enqueue.
+        $on_hpos_list = $on_hpos_page && !$on_hpos_edit;
+
+        $on_legacy_list = ($hook === 'edit.php' && $post_type === 'shop_order');
+        $on_legacy_edit = ($hook === 'post.php' && isset($post) && $post->post_type === 'shop_order');
+
+        if ($on_legacy_list || $on_hpos_list) {
             wp_enqueue_style('wcpd-admin', WCPD_URL . 'assets/admin.css', array(), WCPD_VERSION);
         }
 
-        if ($hook === 'post.php' && isset($post) && $post->post_type === 'shop_order') {
+        if ($on_legacy_edit || $on_hpos_edit) {
+            wp_enqueue_style('wcpd-admin', WCPD_URL . 'assets/admin.css', array(), WCPD_VERSION);
             wp_enqueue_script('wcpd-admin', WCPD_URL . 'assets/admin.js', array('jquery'), WCPD_VERSION, true);
             wp_localize_script('wcpd-admin', 'wcpd_admin', array(
                 'ajax_url' => admin_url('admin-ajax.php'),
@@ -47,14 +77,16 @@ class WCPD_Admin {
             'wcpd_box',
             __('Pre-Order Deposit Manager', 'wc-preorder-deposit'),
             array(__CLASS__, 'render_box'),
-            'shop_order',
+            self::get_order_screen_id(),
             'side',
             'high'
         );
     }
 
-    public static function render_box($post) {
-        $order = wc_get_order($post->ID);
+    public static function render_box($post_or_order) {
+        // On HPOS screens, WooCommerce passes the WC_Order object itself
+        // rather than a WP_Post (see WooCommerce's own Edit::render()).
+        $order = is_a($post_or_order, 'WC_Order') ? $post_or_order : wc_get_order($post_or_order->ID);
 
         if (!WCPD_Order::is_preorder($order)) {
             echo '<div class="wcpd-meta-empty">';
@@ -118,7 +150,7 @@ class WCPD_Admin {
                         <span class="wcpd-status-dot wcpd-status-pending"></span>
                         <?php _e('Awaiting final payment from customer.', 'wc-preorder-deposit'); ?>
                     </div>
-                <?php elseif ($status === 'preorder-completed') : ?>
+                <?php elseif ($status === 'preorder-done') : ?>
                     <div class="wcpd-status-msg wcpd-status-msg-success">
                         <span class="wcpd-status-dot wcpd-status-success"></span>
                         <?php _e('Pre-order fully completed.', 'wc-preorder-deposit'); ?>
@@ -140,12 +172,14 @@ class WCPD_Admin {
         return $new;
     }
 
-    public static function col_show($column, $post_id) {
+    public static function col_show($column, $post_id_or_order) {
         if ($column !== 'wcpd_preorder') {
             return;
         }
 
-        $order = wc_get_order($post_id);
+        // On HPOS screens, WooCommerce passes the WC_Order object itself
+        // rather than a post ID (see WC_Orders_Table_List_Table::render_column()).
+        $order = is_a($post_id_or_order, 'WC_Order') ? $post_id_or_order : wc_get_order($post_id_or_order);
         if (WCPD_Order::is_preorder($order)) {
             $rem = (float) $order->get_meta('_wcpd_remaining_total');
             echo '<div class="wcpd-list-badge">';

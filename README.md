@@ -16,8 +16,8 @@ A WooCommerce extension that lets customers pay a 30% deposit on pre-order produ
 
 ## Requirements
 
-- WordPress 5.8+
-- WooCommerce 6.0+
+- WordPress 5.8+ (tested up to 7.1)
+- WooCommerce 6.0+ (tested up to 11.0, including High-Performance Order Storage)
 - PHP 7.4+
 
 ## Installation
