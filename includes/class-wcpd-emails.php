@@ -65,5 +65,3 @@ class WCPD_Email_Preorder_Ready extends WC_Email {
         ), '', $this->template_base);
     }
 }
-
-add_action('wcpd_preorder_ready_notification', array('WCPD_Email_Preorder_Ready', 'trigger'), 10, 1);

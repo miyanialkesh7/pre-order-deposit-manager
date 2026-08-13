@@ -53,8 +53,8 @@ class WCPD_Cart {
         echo '<div class="wcpd-cart-notice">';
         echo '<div class="wcpd-notice-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>';
         echo '<div class="wcpd-notice-body">';
-        echo '<strong>' . __('Pre-Order Items in Cart', 'wc-preorder-deposit') . '</strong>';
-        echo '<span>' . __('You will be charged a 30% deposit now. The remaining balance will be due when your order is ready for delivery.', 'wc-preorder-deposit') . '</span>';
+        echo '<strong>' . esc_html__('Pre-Order Items in Cart', 'wc-preorder-deposit') . '</strong>';
+        echo '<span>' . esc_html__('You will be charged a 30% deposit now. The remaining balance will be due when your order is ready for delivery.', 'wc-preorder-deposit') . '</span>';
         echo '</div></div>';
     }
 

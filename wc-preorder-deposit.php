@@ -81,8 +81,6 @@ function wcpd_init_plugin() {
         return;
     }
 
-    require_once WCPD_DIR . 'includes/class-wcpd-emails.php';
-
     WCPD_Product::init();
     WCPD_Cart::init();
     WCPD_Order::init();
@@ -92,6 +90,13 @@ function wcpd_init_plugin() {
     add_action('wp_enqueue_scripts', 'wcpd_enqueue_assets');
     add_action('admin_enqueue_scripts', 'wcpd_admin_assets');
     add_filter('woocommerce_email_classes', 'wcpd_register_email_class');
+
+    // Force WooCommerce's mailer to initialize now, in the same request. This
+    // guarantees our woocommerce_email_classes callback (and therefore the
+    // wcpd_preorder_ready_notification listener it registers) runs on every
+    // request, rather than only when something else happens to trigger the
+    // mailer first.
+    WC()->mailer();
 }
 
 function wcpd_enqueue_assets() {
@@ -113,7 +118,17 @@ function wcpd_admin_assets($hook) {
 }
 
 function wcpd_register_email_class($emails) {
+    // Loaded here rather than at plugins_loaded because WC_Email itself is
+    // only available once WooCommerce reaches this point in WC_Emails::init().
+    require_once WCPD_DIR . 'includes/class-wcpd-emails.php';
+
     $emails['WCPD_Email_Preorder_Ready'] = new WCPD_Email_Preorder_Ready();
+
+    // trigger() is an instance method, so the listener must reference this
+    // specific object rather than the class name (a non-static method can't
+    // be invoked as a static callback).
+    add_action('wcpd_preorder_ready_notification', array($emails['WCPD_Email_Preorder_Ready'], 'trigger'), 10, 1);
+
     return $emails;
 }
 

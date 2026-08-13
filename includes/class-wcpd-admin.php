@@ -38,7 +38,11 @@ class WCPD_Admin {
         }
         echo '<p class="wcpd-admin-badge">';
         echo '<span class="wcpd-pill wcpd-pill-info">PRE-ORDER</span>';
-        echo '<span class="wcpd-pill wcpd-pill-amount">' . sprintf(__('Remaining: %s', 'wc-preorder-deposit'), wc_price((float) $order->get_meta('_wcpd_remaining_total'))) . '</span>';
+        echo '<span class="wcpd-pill wcpd-pill-amount">' . sprintf(
+            /* translators: %s: remaining balance formatted as currency. */
+            esc_html__('Remaining: %s', 'wc-preorder-deposit'),
+            wc_price((float) $order->get_meta('_wcpd_remaining_total')) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output.
+        ) . '</span>';
         echo '</p>';
     }
 
@@ -59,7 +63,7 @@ class WCPD_Admin {
         if (!WCPD_Order::is_preorder($order)) {
             echo '<div class="wcpd-meta-empty">';
             echo '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>';
-            echo '<p>' . __('This order is not a pre-order.', 'wc-preorder-deposit') . '</p>';
+            echo '<p>' . esc_html__('This order is not a pre-order.', 'wc-preorder-deposit') . '</p>';
             echo '</div>';
             return;
         }
@@ -75,26 +79,26 @@ class WCPD_Admin {
                 <div class="wcpd-meta-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                 </div>
-                <div class="wcpd-meta-title"><?php _e('Payment Breakdown', 'wc-preorder-deposit'); ?></div>
+                <div class="wcpd-meta-title"><?php esc_html_e('Payment Breakdown', 'wc-preorder-deposit'); ?></div>
             </div>
 
             <div class="wcpd-meta-grid">
                 <div class="wcpd-meta-card">
-                    <div class="wcpd-meta-label"><?php _e('Total Value', 'wc-preorder-deposit'); ?></div>
-                    <div class="wcpd-meta-value"><?php echo wc_price($full); ?></div>
+                    <div class="wcpd-meta-label"><?php esc_html_e('Total Value', 'wc-preorder-deposit'); ?></div>
+                    <div class="wcpd-meta-value"><?php echo wc_price($full); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output. ?></div>
                 </div>
                 <div class="wcpd-meta-card">
-                    <div class="wcpd-meta-label"><?php _e('Deposit Paid', 'wc-preorder-deposit'); ?></div>
-                    <div class="wcpd-meta-value wcpd-meta-accent"><?php echo wc_price($deposit); ?></div>
+                    <div class="wcpd-meta-label"><?php esc_html_e('Deposit Paid', 'wc-preorder-deposit'); ?></div>
+                    <div class="wcpd-meta-value wcpd-meta-accent"><?php echo wc_price($deposit); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output. ?></div>
                 </div>
                 <div class="wcpd-meta-card">
-                    <div class="wcpd-meta-label"><?php _e('Remaining', 'wc-preorder-deposit'); ?></div>
-                    <div class="wcpd-meta-value wcpd-meta-warn"><?php echo wc_price($remaining); ?></div>
+                    <div class="wcpd-meta-label"><?php esc_html_e('Remaining', 'wc-preorder-deposit'); ?></div>
+                    <div class="wcpd-meta-value wcpd-meta-warn"><?php echo wc_price($remaining); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output. ?></div>
                 </div>
                 <?php if ($paid_rem > 0) : ?>
                 <div class="wcpd-meta-card wcpd-meta-card-full">
-                    <div class="wcpd-meta-label"><?php _e('Remaining Paid', 'wc-preorder-deposit'); ?></div>
-                    <div class="wcpd-meta-value wcpd-meta-success"><?php echo wc_price($paid_rem); ?></div>
+                    <div class="wcpd-meta-label"><?php esc_html_e('Remaining Paid', 'wc-preorder-deposit'); ?></div>
+                    <div class="wcpd-meta-value wcpd-meta-success"><?php echo wc_price($paid_rem); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output. ?></div>
                 </div>
                 <?php endif; ?>
             </div>
@@ -103,25 +107,25 @@ class WCPD_Admin {
                 <?php if ($status === 'preorder-deposit') : ?>
                     <button type="button" class="wcpd-btn wcpd-btn-primary wcpd-btn-ready" data-order="<?php echo esc_attr($order->get_id()); ?>">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        <?php _e('Mark Ready & Notify', 'wc-preorder-deposit'); ?>
+                        <?php esc_html_e('Mark Ready & Notify', 'wc-preorder-deposit'); ?>
                     </button>
                     <button type="button" class="wcpd-btn wcpd-btn-secondary wcpd-btn-charge" data-order="<?php echo esc_attr($order->get_id()); ?>">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                        <?php _e('Auto-Charge Remainder', 'wc-preorder-deposit'); ?>
+                        <?php esc_html_e('Auto-Charge Remainder', 'wc-preorder-deposit'); ?>
                     </button>
                     <div class="wcpd-meta-hint">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                        <?php _e('Auto-charge works only with saved cards via supported gateways (Stripe, etc.).', 'wc-preorder-deposit'); ?>
+                        <?php esc_html_e('Auto-charge works only with saved cards via supported gateways (Stripe, etc.).', 'wc-preorder-deposit'); ?>
                     </div>
                 <?php elseif ($status === 'preorder-ready') : ?>
                     <div class="wcpd-status-msg">
                         <span class="wcpd-status-dot wcpd-status-pending"></span>
-                        <?php _e('Awaiting final payment from customer.', 'wc-preorder-deposit'); ?>
+                        <?php esc_html_e('Awaiting final payment from customer.', 'wc-preorder-deposit'); ?>
                     </div>
                 <?php elseif ($status === 'preorder-completed') : ?>
                     <div class="wcpd-status-msg wcpd-status-msg-success">
                         <span class="wcpd-status-dot wcpd-status-success"></span>
-                        <?php _e('Pre-order fully completed.', 'wc-preorder-deposit'); ?>
+                        <?php esc_html_e('Pre-order fully completed.', 'wc-preorder-deposit'); ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -150,7 +154,11 @@ class WCPD_Admin {
             $rem = (float) $order->get_meta('_wcpd_remaining_total');
             echo '<div class="wcpd-list-badge">';
             echo '<span class="wcpd-pill">PRE-ORDER</span>';
-            echo '<small>' . sprintf(__('Remaining: %s', 'wc-preorder-deposit'), wc_price($rem)) . '</small>';
+            echo '<small>' . sprintf(
+                /* translators: %s: remaining balance formatted as currency. */
+                esc_html__('Remaining: %s', 'wc-preorder-deposit'),
+                wc_price($rem) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output.
+            ) . '</small>';
             echo '</div>';
         } else {
             echo '<span class="wcpd-na">—</span>';

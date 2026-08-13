@@ -23,6 +23,10 @@ class WCPD_Product {
     }
 
     public static function save_option($post_id) {
+        if (!isset($_POST['woocommerce_meta_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['woocommerce_meta_nonce'])), 'woocommerce_save_data')) {
+            return;
+        }
+
         $enabled = isset($_POST['_wcpd_enabled']) ? 'yes' : 'no';
         update_post_meta($post_id, '_wcpd_enabled', $enabled);
     }

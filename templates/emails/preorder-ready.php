@@ -12,7 +12,7 @@ $deposit = (float) $order->get_meta('_wcpd_deposit_total');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?php echo get_bloginfo('name'); ?></title>
+<title><?php echo esc_html(get_bloginfo('name')); ?></title>
 <style>
 @media only screen and (max-width: 600px) {
     .wcpd-wrap { width: 100% !important; padding: 20px 16px !important; }
@@ -38,9 +38,15 @@ $deposit = (float) $order->get_meta('_wcpd_deposit_total');
                 <div style="display:inline-block;padding:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:50%;margin-bottom:20px;">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                 </div>
-                <h2 style="margin:0 0 8px 0;font-size:20px;font-weight:700;color:#0f172a;"><?php _e('Your product is ready', 'wc-preorder-deposit'); ?></h2>
+                <h2 style="margin:0 0 8px 0;font-size:20px;font-weight:700;color:#0f172a;"><?php esc_html_e('Your product is ready', 'wc-preorder-deposit'); ?></h2>
                 <p style="margin:0;font-size:15px;color:#64748b;line-height:1.5;">
-                    <?php printf(__('Hi! Your pre-order %s is now ready for delivery.', 'wc-preorder-deposit'), '<strong style="color:#4f46e5;">#' . esc_html($order->get_order_number()) . '</strong>'); ?>
+                    <?php
+                    printf(
+                        /* translators: %s: order number wrapped in a styled <strong> tag. */
+                        esc_html__('Hi! Your pre-order %s is now ready for delivery.', 'wc-preorder-deposit'),
+                        '<strong style="color:#4f46e5;">#' . esc_html($order->get_order_number()) . '</strong>'
+                    );
+                    ?>
                 </p>
             </td>
         </tr>
@@ -49,38 +55,38 @@ $deposit = (float) $order->get_meta('_wcpd_deposit_total');
 
         <tr>
             <td class="wcpd-card" style="background:#ffffff;border-radius:12px;padding:32px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.04);">
-                <h3 style="margin:0 0 20px 0;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;font-weight:700;"><?php _e('Payment Summary', 'wc-preorder-deposit'); ?></h3>
+                <h3 style="margin:0 0 20px 0;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;font-weight:700;"><?php esc_html_e('Payment Summary', 'wc-preorder-deposit'); ?></h3>
 
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                     <tr>
                         <td style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
-                            <span style="font-size:14px;color:#64748b;"><?php _e('Total Value', 'wc-preorder-deposit'); ?></span>
+                            <span style="font-size:14px;color:#64748b;"><?php esc_html_e('Total Value', 'wc-preorder-deposit'); ?></span>
                         </td>
                         <td align="right" style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
-                            <span style="font-size:14px;font-weight:700;color:#0f172a;"><?php echo wc_price($full); ?></span>
+                            <span style="font-size:14px;font-weight:700;color:#0f172a;"><?php echo wc_price($full); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output. ?></span>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
-                            <span style="font-size:14px;color:#64748b;"><?php _e('Deposit Paid', 'wc-preorder-deposit'); ?></span>
+                            <span style="font-size:14px;color:#64748b;"><?php esc_html_e('Deposit Paid', 'wc-preorder-deposit'); ?></span>
                         </td>
                         <td align="right" style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
-                            <span style="font-size:14px;font-weight:700;color:#4f46e5;"><?php echo wc_price($deposit); ?></span>
+                            <span style="font-size:14px;font-weight:700;color:#4f46e5;"><?php echo wc_price($deposit); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output. ?></span>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:16px 0 0 0;">
-                            <span style="font-size:14px;color:#0f172a;font-weight:600;"><?php _e('Remaining Amount', 'wc-preorder-deposit'); ?></span>
+                            <span style="font-size:14px;color:#0f172a;font-weight:600;"><?php esc_html_e('Remaining Amount', 'wc-preorder-deposit'); ?></span>
                         </td>
                         <td align="right" style="padding:16px 0 0 0;">
-                            <span style="font-size:18px;font-weight:800;color:#d97706;"><?php echo wc_price($remaining); ?></span>
+                            <span style="font-size:18px;font-weight:800;color:#d97706;"><?php echo wc_price($remaining); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its own output. ?></span>
                         </td>
                     </tr>
                 </table>
 
                 <div style="margin-top:28px;padding:16px;background:#f5f3ff;border-radius:8px;border-left:4px solid #4f46e5;">
                     <p style="margin:0;font-size:13px;color:#3730a3;line-height:1.5;">
-                        <?php _e('Please complete the payment as soon as possible so we can deliver your order. If you have any questions, our team is happy to help.', 'wc-preorder-deposit'); ?>
+                        <?php esc_html_e('Please complete the payment as soon as possible so we can deliver your order. If you have any questions, our team is happy to help.', 'wc-preorder-deposit'); ?>
                     </p>
                 </div>
             </td>
